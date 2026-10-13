@@ -2,7 +2,7 @@
 title: "Foundations for inference - Sampling distributions"
 output: 
     bookdown::html_document2
-author: "Your Name Goes Here"
+author: "Madison Dearth"
 css: "lab.css"
 date: 'Last compiled: `r format(Sys.time(), "%B %d, %Y at %X")`'
 ---
@@ -44,7 +44,7 @@ library(scales)
 This lab uses real estate data from the city of Ames, Iowa. The details of every real estate transaction in Ames is recorded by the City Assessor's office. The particular focus for this lab will be all residential home sales in Ames between 2006 and 2010.  This collection represents the population of interest. In this lab, you will learn about these home sales by taking smaller samples from the full population. Start by loading the data.
 
 ```{r, label = "load-data"}
-data(ames)  
+data(ames)
 ```
 
 There are `r dim(ames)[2]` variables in the `ames` data set. For this lab, you will only use two of the variables: the above ground living area of the house in square feet (`area`) and the sale price (`price`).
@@ -83,7 +83,7 @@ ___________
 </ol>
 
 <div id="answer">
-Type your answer to Question 1 here and delete this sentence.
+B) 50\% of the houses in Ames are smaller than the median, which is 1442 square feet, rather than the median.
 
 
 </div>
@@ -111,8 +111,11 @@ ________
 </div>
 
 ```{r, label = "samp1-dist"}
-# Type your code for the Exercise  1 here, and Knit.
+ggplot(samp1, aes(x=area)) +
+  geom_histogram(bins=10)
 
+# calculate summary statistics
+samp1 |> summarize(mean=mean(area), median=median(area), Q1=quantile(area,.25), Q3=quantile(area,.75), IQR=quantile(area,.75)-quantile(area,.25))
 ```
 
 <div id="answer">
@@ -144,7 +147,7 @@ _________
 </ol>
 
 <div id="answer">
-Type your answer for Question 2 here and delete this sentence.
+C) The sample size of 1000 would provide the most accurate estimate of the population mean.
 
 
 </div>
@@ -183,19 +186,19 @@ ___________________
 </div>
 
 ```{r, label = "ANSques"}
-# Type your code for the Exercise 2 here, and Knit.
-
+num_rows_sample_means50 <- dim(sample_means50)[1]
+mean_means50 <- mean(sample_means50$x_bar)
+sd_means50 <- sd(sample_means50$x_bar)
 ```
 
 ```{r label = "sampling-dist", fig.cap = "Sampling distribution of the sample mean ($\\bar{x}$)"}
-# Type your code for the Exercise 2 here, and Knit.
-
+ggplot(sample_means50, aes(x=x_bar)) +
+  geom_histogram(binwidth=20)
 ```
 
 <div id="answer">
-Type your answer for **Exercise 2** here and delete this sentence.
-
-
+There are `r num_rows_sample_means50` rows in `sample_means50`.
+Its center is its mean of `r mean_means50`. It has a standard deviation of `r sd_means50` square feet and is unimodal and approximately symmetric.
 </div>
 
 _____________
@@ -225,13 +228,12 @@ ________
 </div>
 
 ```{r, label = "practice-sampling-dist"}
-# Type your code for the Exercise 3 here, and Knit.
-
+sample_means_small <- rep_sample_n(ames, 10, replace=TRUE, reps=25) |> group_by(replicate) |> summarize(x_bar=mean(area))
+sample_means_small
 ```
 
 <div id="answer">
-Type your answer for **Exercise 3** here and delete this sentence.
-
+The dimensions of sample_means_small are `r dim(sample_means_small)[1]` rows by `r dim(sample_means_small)[2]` columns. Each row represents the sample mean of one sample of 10 rows from `ames`.
 
 </div>
 
@@ -246,14 +248,8 @@ ____________
 <li> 5,000 </li>
 </ol>
 
-```{r, label = "sample-means-small"}
-# Type your code for Question 3 here, and Knit.
-
-```
-
 <div id="answer">
-Type your answer for Question 3 here and delete this sentence.
-
+There are `r dim(sample_means_small)[1]` rows. The correct answer is C).
 
 </div>
 
@@ -267,8 +263,7 @@ ________________
 </ol>
 
 <div id="answer">
-Type your answer for Question 4 here and delete this sentence.
-
+A) Each element represents a mean square footage from a simple random sample of 10 houses.
 
 </div>
 
