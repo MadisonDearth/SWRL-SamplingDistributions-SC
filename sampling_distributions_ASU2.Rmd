@@ -7,28 +7,27 @@ css: "lab.css"
 date: 'Last compiled: `r format(Sys.time(), "%B %d, %Y at %X")`'
 ---
 
-____________
+------------------------------------------------------------------------
 
-<div id="license">
+::: {#license}
 This is a derivative of an [OpenIntro](https://www.openintro.org/stat/labs.php) lab, and is released under a [Attribution-NonCommercial-ShareAlike 3.0 United States](https://creativecommons.org/licenses/by-nc-sa/3.0/us/) license.
-</div>
+:::
 
 ```{r, label = "setup", include = FALSE}
 knitr::opts_chunk$set(comment = NA, fig.align = "center", message = FALSE, warning = FALSE)
 ```
 
-<div id="instructions">
-Complete all **Exercises and Questions**.  Make sure you stage and commit all files to the GitHub Classroom.
-</div>
+::: {#instructions}
+Complete all **Exercises and Questions**. Make sure you stage and commit all files to the GitHub Classroom.
+:::
 
-____________
+------------------------------------------------------------------------
 
-## Getting Started {-}
+## Getting Started {.unnumbered}
 
-### Load packages {-}
+### Load packages {.unnumbered}
 
-In this lab, you will explore the data using the `dplyr` package and visualize the data with the `ggplot2` package. The data can be found in the
-companion package for this course, `statsr`.
+In this lab, you will explore the data using the `dplyr` package and visualize the data with the `ggplot2` package. The data can be found in the companion package for this course, `statsr`.
 
 Start by loading the packages `statsr`, `dplyr`, `scales`, and `ggplot2`.
 
@@ -39,9 +38,9 @@ library(ggplot2)
 library(scales)
 ```
 
-### The data {-}
+### The data {.unnumbered}
 
-This lab uses real estate data from the city of Ames, Iowa. The details of every real estate transaction in Ames is recorded by the City Assessor's office. The particular focus for this lab will be all residential home sales in Ames between 2006 and 2010.  This collection represents the population of interest. In this lab, you will learn about these home sales by taking smaller samples from the full population. Start by loading the data.
+This lab uses real estate data from the city of Ames, Iowa. The details of every real estate transaction in Ames is recorded by the City Assessor's office. The particular focus for this lab will be all residential home sales in Ames between 2006 and 2010. This collection represents the population of interest. In this lab, you will learn about these home sales by taking smaller samples from the full population. Start by loading the data.
 
 ```{r, label = "load-data"}
 data(ames)
@@ -58,7 +57,7 @@ ggplot(data = ames, aes(x = area)) +
   theme_bw()
 ```
 
-Summary statistics can be computed using the `summarize` function from `dplyr`. One can calculate as many statistics as needed  using this function. Some of the functions below should be self explanatory (like `mean`, `median`, `sd`, `IQR`, `min`, and `max`).  A new function here is the `quantile` function, which can be used to calculate  values corresponding to specific percentile cutoffs in the distribution. For example `quantile(x, 0.25)` will yield the cutoff value for the 25^th^ percentile (Q1) in the distribution of `x`. Finding appropriate values is useful for characterizing the  distribution. The values are used for descriptions such as *"the middle 50% of the homes have areas between such and such square feet."*
+Summary statistics can be computed using the `summarize` function from `dplyr`. One can calculate as many statistics as needed using this function. Some of the functions below should be self explanatory (like `mean`, `median`, `sd`, `IQR`, `min`, and `max`). A new function here is the `quantile` function, which can be used to calculate values corresponding to specific percentile cutoffs in the distribution. For example `quantile(x, 0.25)` will yield the cutoff value for the 25^th^ percentile (Q1) in the distribution of `x`. Finding appropriate values is useful for characterizing the distribution. The values are used for descriptions such as *"the middle 50% of the homes have areas between such and such square feet."*
 
 ```{r,  label = "area-stats"}
 POP <- ames %>%
@@ -71,31 +70,35 @@ POP <- ames %>%
 knitr::kable(POP, caption = "Population Parameters", col.names = c("$\\mu$", "$\\theta$", "$\\sigma$", "$\\text{IQR}$", "$\\text{MIN}$", "$\\text{MAX}$", "$\\text{Q}_1$", "$\\text{Q}_3$", "$\\text{G}_1$"))
 ```
 
-___________
+------------------------------------------------------------------------
 
 1.  Which of the following is **false**?
-<ol>
-<li> The distribution of areas of houses in Ames is unimodal and right-skewed. </li>
-<li> 50\% of houses in Ames are smaller than 1,499.69 square feet. </li>
-<li> The middle 50\% of the houses range between approximately 1,126 square feet and 1,742.7 square feet. </li>
-<li> The IQR is approximately 616.7 square feet. </li>
-<li> The smallest house is 334 square feet and the largest is 5,642 square feet. </li>
-</ol>
 
-<div id="answer">
-B) 50\% of the houses in Ames are smaller than the median, which is 1442 square feet, rather than the median.
+    <ol>
 
+    <li>The distribution of areas of houses in Ames is unimodal and right-skewed.</li>
 
-</div>
+    <li>50% of houses in Ames are smaller than 1,499.69 square feet.</li>
 
-_____________
+    <li>The middle 50% of the houses range between approximately 1,126 square feet and 1,742.7 square feet.</li>
 
-## The unknown sampling distribution {-}
+    <li>The IQR is approximately 616.7 square feet.</li>
 
-In this lab, the entire population is present, but this is rarely the  case in real life. Gathering information on an entire population is often  extremely costly or even impossible. Because of this, one will often take a sample of the population and use that sample to infer properties of the population.
+    <li>The smallest house is 334 square feet and the largest is 5,642 square feet.</li>
 
-If one were interested in estimating the mean living area in Ames based on a 
-sample, one could use the following command to take a simple random sample (sampling without replacement) of size $n = 50$ from the population.
+    </ol>
+
+::: {#answer}
+B)  50% of the houses in Ames are smaller than the median, which is 1442 square feet, rather than the median.
+:::
+
+------------------------------------------------------------------------
+
+## The unknown sampling distribution {.unnumbered}
+
+In this lab, the entire population is present, but this is rarely the case in real life. Gathering information on an entire population is often extremely costly or even impossible. Because of this, one will often take a sample of the population and use that sample to infer properties of the population.
+
+If one were interested in estimating the mean living area in Ames based on a sample, one could use the following command to take a simple random sample (sampling without replacement) of size $n = 50$ from the population.
 
 ```{r, label = "samp1"}
 samp1 <- ames %>%
@@ -104,11 +107,11 @@ samp1 <- ames %>%
 
 This command creates a simple random sample of `size` 50 from the `ames` data-set and assigns the sample to `samp1`. This emulates going into the City Assessor's database and pulling up the files on 50 random home sales. Working with these 50 files would be considerably simpler than working with all 2930 home sales.
 
-________
+------------------------------------------------------------------------
 
-<div id="exercise">
+::: {#exercise}
 **Exercise 1:** Describe the distribution of this sample? How does it compare to the distribution of the population? **Hint:** `sample_n` function takes a random sample of observations (i.e. rows) from the data-set, you can still refer to the variables in the data-set with the same names. Code you used in the previous exercise will also be helpful for visualizing and summarizing the sample; however, be careful not to label values `mu` and `sigma` anymore since these are sample statistics, not population parameters. You can customize the labels of any of the statistics to indicate that these come from the sample.
-</div>
+:::
 
 ```{r, label = "samp1-dist"}
 ggplot(samp1, aes(x=area)) +
@@ -118,15 +121,13 @@ ggplot(samp1, aes(x=area)) +
 samp1 |> summarize(mean=mean(area), median=median(area), Q1=quantile(area,.25), Q3=quantile(area,.75), IQR=quantile(area,.75)-quantile(area,.25))
 ```
 
-<div id="answer">
+::: {}
 Type your answer for **Exercise 1** here and delete this sentence.
 
+When reporting area be sure to report with proper units. That is, $\text{ft}^2$.
+:::
 
-When reporting area be sure to report with proper units.  That is, $\text{ft}^2$.
-
-</div>
-
-_________
+------------------------------------------------------------------------
 
 **If** one were interested in estimating the average living area in homes in Ames using the sample, the best single guess is the sample mean.
 
@@ -135,33 +136,37 @@ samp1 %>%
   summarize(xbar = mean(area))
 ```
 
-Depending on which 50 homes one selects, their estimate could be above or below the true population mean of `r round(POP$mu,2)` square feet. However, the sample mean is the best unbiased estimate of the population mean (average living area), and we were able to get it by sampling less than 3\% of the population.
+Depending on which 50 homes one selects, their estimate could be above or below the true population mean of `r round(POP$mu,2)` square feet. However, the sample mean is the best unbiased estimate of the population mean (average living area), and we were able to get it by sampling less than 3% of the population.
 
-_________
+------------------------------------------------------------------------
 
-2. Suppose we took two more samples, one of size 100 and one of size 1000. Which would you think would provide a more accurate estimate of the population mean?
-<ol>
-<li> Sample size of 50. </li>
-<li> Sample size of 100. </li>
-<li> Sample size of 1000. </li>
-</ol>
+2.  Suppose we took two more samples, one of size 100 and one of size 1000. Which would you think would provide a more accurate estimate of the population mean?
 
-<div id="answer">
-C) The sample size of 1000 would provide the most accurate estimate of the population mean.
+    <ol>
 
+    <li>Sample size of 50.</li>
 
-</div>
+    <li>Sample size of 100.</li>
 
-__________
+    <li>Sample size of 1000.</li>
+
+    </ol>
+
+::: {}
+C)  The sample size of 1000 would provide the most accurate estimate of the population mean.
+:::
+
+------------------------------------------------------------------------
 
 Take one more sample of size 50, and compute the mean `area` of this sample:
+
 ```{r label = "mean-samp2"}
 ames %>%
   sample_n(size = 50) %>%
   summarize(x_bar = mean(area))
 ```
 
-Not surprisingly, every time a new random sample is generated, the resulting sample mean is generally different. It is useful to develop a sense of just how much variability one  should expect when estimating the population mean this way. The distribution  of sample means, called the *sampling distribution*, can help one understand  this variability. In this lab, because you have access to the population, you  can build up the sampling distribution for the sample mean by repeating the  above steps many times. Consider the following code where the mean of 15,000 samples each of size $n = 50$ is computed.  Note that the sampling for the sampling distribution is done with replacement.
+Not surprisingly, every time a new random sample is generated, the resulting sample mean is generally different. It is useful to develop a sense of just how much variability one should expect when estimating the population mean this way. The distribution of sample means, called the *sampling distribution*, can help one understand this variability. In this lab, because you have access to the population, you can build up the sampling distribution for the sample mean by repeating the above steps many times. Consider the following code where the mean of 15,000 samples each of size $n = 50$ is computed. Note that the sampling for the sampling distribution is done with replacement.
 
 ```{r label = "loop"}
 sample_means50 <- ames %>%
@@ -177,13 +182,13 @@ ggplot(data = sample_means50, aes(x = x_bar)) +
   labs(x = expression(bar(x))) 
 ```
 
-In the previous code, `R` generates 15,000 samples each of size 50 from the population, computes the mean of each sample of size 50, and stores the result in a vector (`x_bar`) of the `sample_means50` tibble. 
+In the previous code, `R` generates 15,000 samples each of size 50 from the population, computes the mean of each sample of size 50, and stores the result in a vector (`x_bar`) of the `sample_means50` tibble.
 
-___________________
+------------------------------------------------------------------------
 
-<div id="exercise">
-**Exercise 2**: How many rows are there in `sample_means50`?  Describe the sampling distribution, and be sure to note its center. Make sure to include a plot of the distribution in your answer.
-</div>
+::: {}
+**Exercise 2**: How many rows are there in `sample_means50`? Describe the sampling distribution, and be sure to note its center. Make sure to include a plot of the distribution in your answer.
+:::
 
 ```{r, label = "ANSques"}
 num_rows_sample_means50 <- dim(sample_means50)[1]
@@ -196,20 +201,19 @@ ggplot(sample_means50, aes(x=x_bar)) +
   geom_histogram(binwidth=20)
 ```
 
-<div id="answer">
-There are `r num_rows_sample_means50` rows in `sample_means50`.
-Its center is its mean of `r mean_means50`. It has a standard deviation of `r sd_means50` square feet and is unimodal and approximately symmetric.
-</div>
+::: {}
+There are `r num_rows_sample_means50` rows in `sample_means50`. Its center is its mean of `r mean_means50`. It has a standard deviation of `r sd_means50` square feet and is unimodal and approximately symmetric.
+:::
 
-_____________
+------------------------------------------------------------------------
 
-## Interlude: Sampling distributions {-}
+## Interlude: Sampling distributions {.unnumbered}
 
-The idea behind the `rep_sample_n` function is *repetition*. Earlier, a single sample of size $n = 50$ was taken from the population of all houses in Ames. With this new function, one is able to repeat this sampling procedure `rep` times in order to build a distribution of a series of sample statistics, called the  **simulated sampling distribution**.  The set of all possible values of the statistic and the frequency with which those values occur is the theoretical sampling distribution.
+The idea behind the `rep_sample_n` function is *repetition*. Earlier, a single sample of size $n = 50$ was taken from the population of all houses in Ames. With this new function, one is able to repeat this sampling procedure `rep` times in order to build a distribution of a series of sample statistics, called the **simulated sampling distribution**. The set of all possible values of the statistic and the frequency with which those values occur is the theoretical sampling distribution.
 
-Note that in practice, one rarely gets to build theoretical sampling distributions because we rarely have access to data from the entire population. 
+Note that in practice, one rarely gets to build theoretical sampling distributions because we rarely have access to data from the entire population.
 
-Without the `rep_sample_n` function, this would be tedious. The following code would have to be run 15,000 times  manually.
+Without the `rep_sample_n` function, this would be tedious. The following code would have to be run 15,000 times manually.
 
 ```{r, label = "sample-code", eval = FALSE}
 ames %>%
@@ -221,55 +225,64 @@ The resulting sample means would be stored each time in a separate object.
 
 Note that for each of the 15,000 times a mean was computed, it was done from a **different** sample!
 
-________
+------------------------------------------------------------------------
 
-<div id="exercise">
+::: {}
 **Exercise 3**: To make sure you understand how sampling distributions are built and exactly what the `rep_sample_n` function is doing, try modifying the code to create a sampling distribution of **25 sample means** from **samples of size 10**, and put them in a data frame named `sample_means_small`. Print the output. What are the dimensions of the object called `sample_means_small`? What does each row represent?
-</div>
+:::
 
 ```{r, label = "practice-sampling-dist"}
 sample_means_small <- rep_sample_n(ames, 10, replace=TRUE, reps=25) |> group_by(replicate) |> summarize(x_bar=mean(area))
 sample_means_small
 ```
 
-<div id="answer">
+::: {}
 The dimensions of sample_means_small are `r dim(sample_means_small)[1]` rows by `r dim(sample_means_small)[2]` columns. Each row represents the sample mean of one sample of 10 rows from `ames`.
+:::
 
-</div>
+------------------------------------------------------------------------
 
-____________
+3.  How many rows are there in this object called `sample_means_small`?
 
-3. How many rows are there in this object called `sample_means_small`? 
-<ol>
-<li> 0 </li>
-<li> 3 </li>
-<li> 25 </li>
-<li> 100 </li>
-<li> 5,000 </li>
-</ol>
+    <ol>
 
-<div id="answer">
+    <li>0</li>
+
+    <li>3</li>
+
+    <li>25</li>
+
+    <li>100</li>
+
+    <li>5,000</li>
+
+    </ol>
+
+::: {}
 There are `r dim(sample_means_small)[1]` rows. The correct answer is C).
+:::
 
-</div>
+------------------------------------------------------------------------
 
-________________
+4.  Which of the following is **true** about the elements in the sampling distributions you created?
 
-4. Which of the following is **true** about the elements in the sampling distributions you created?
-<ol>
-<li> Each element represents a mean square footage from a simple random sample of 10 houses. </li>
-<li> Each element represents the square footage of a house. </li>
-<li> Each element represents the true population mean of square footage of houses. </li>
-</ol>
+    <ol>
 
-<div id="answer">
-A) Each element represents a mean square footage from a simple random sample of 10 houses.
+    <li>Each element represents a mean square footage from a simple random sample of 10 houses.</li>
 
-</div>
+    <li>Each element represents the square footage of a house.</li>
 
-___________
+    <li>Each element represents the true population mean of square footage of houses.</li>
 
-## Sample size and the sampling distribution {-}
+    </ol>
+
+::: {}
+A)  Each element represents a mean square footage from a simple random sample of 10 houses.
+:::
+
+------------------------------------------------------------------------
+
+## Sample size and the sampling distribution {.unnumbered}
 
 Mechanics aside, consider the reason one used the `rep_sample_n` function: to compute a sampling distribution, specifically, the one shown in Figure \@ref(fig:hist).
 
@@ -280,176 +293,198 @@ ggplot(data = sample_means50, aes(x = x_bar)) +
   labs(x = expression(bar(x)))
 ```
 
-The sampling distribution computed in Figure \@ref(fig:hist) informs the reader 
-about the average living area in homes in Ames.  Because the sample mean is an 
-unbiased estimator, the theoretical sampling distribution is centered at the true average living area of the population, and the theoretical spread of the distribution indicates how much variability is induced by sampling only 50 home sales.
+The sampling distribution computed in Figure \@ref(fig:hist) informs the reader about the average living area in homes in Ames. Because the sample mean is an unbiased estimator, the theoretical sampling distribution is centered at the true average living area of the population, and the theoretical spread of the distribution indicates how much variability is induced by sampling only 50 home sales.
 
 In the remainder of this section, exercises are presented to show the reader the effect sample size has on the resulting sampling distributions.
 
-________
+------------------------------------------------------------------------
 
-<div id="exercise">
+::: {}
 **Exercise 4**: Use the app below to create sampling distributions of means of `area`s from samples of size 10, 30, 50, 100, and 500. Use 10,000 simulations. What does each observation in the sampling distribution represent? How does the mean, standard error, and shape of the sampling distribution change as the sample size increases? How (if at all) do these values change if you increase the number of simulations?
-</div>
-    
+:::
+
 ```{r, label = "shinyApp", echo = FALSE}
 knitr::include_app("https://alanarnholt.shinyapps.io/SamplingDist/", height = "800px")
 ```
 
-<div id="answer">
-Type your answer for **Exercise 4** here and delete this sentence.
+::: {}
+Each observation in the sampling distribution represents the mean area of one sample of data. The mean stays close to 1500, while the standard error decreases and the shape draws closer to the mean with less extreme tails.
+:::
 
+------------------------------------------------------------------------
 
-</div>
+5.  It makes intuitive sense that as the sample size increases, the center of the sampling distribution becomes a more reliable estimate for the true population mean. As the sample size increases, the variability of the sampling distribution \_\_\_\_\_\_\_\_\_\_.
 
-__________
+    <ol>
 
-5. It makes intuitive sense that as the sample size increases, the center of the sampling distribution becomes a more reliable estimate for the true population mean. As the sample size increases, the variability of the sampling distribution __________. 
-<ol>
-<li> decreases </li>
-<li> increases </li>
-<li> stays the same </li>
-</ol>
+    <li>decreases</li>
 
-<div id="answer">
-Type your answer for Question 5 here and delete this sentence.
+    <li>increases</li>
 
+    <li>stays the same</li>
 
-</div>
+    </ol>
 
-________
+::: {}
+A) Decreases
+:::
 
-<div id="exercise">
+------------------------------------------------------------------------
+
+::: {}
 **Exercise 5**: Take a random sample of size 50 from `price`. Using this sample, what is your best point estimate of the population mean?
-</div>
+:::
 
 ```{r, label = "price-sample"}
-# Type your code for Exercise 5 here, and Knit.
-
+price_sample50 <- sample_n(ames, 50) |> select(price)
+mean(price_sample50$price)
 ```
 
-<div id="answer">
-Type your answer for Exercise 5 here and delete this sentence.
+::: {}
+My best estimate for the population mean of the price using this sample is around \$`r round(mean(price_sample50$price), -3)`.
+:::
 
+------------------------------------------------------------------------
 
-</div>
-
-_____________
-
-<div id="exercise">
-**Exercise 6**: Since you have access to the population, simulate the sampling distribution for $\bar{x}_{price}$ by taking 5000 samples of size 50 from the population  and computing 5000 sample means.  Store these means in a vector named `x_bar` in a tibble named `sample_means50`. Plot the data; then, describe the shape of this sampling distribution. Based on this sampling distribution, what would you guess the mean home price of the population to be?
-</div>
+::: {}
+**Exercise 6**: Since you have access to the population, simulate the sampling distribution for $\bar{x}_{price}$ by taking 5000 samples of size 50 from the population and computing 5000 sample means. Store these means in a vector named `x_bar` in a tibble named `sample_means50`. Plot the data; then, describe the shape of this sampling distribution. Based on this sampling distribution, what would you guess the mean home price of the population to be?
+:::
 
 ```{r, label = "price-sampling"}
-# Type your code for Exercise 6 here, and Knit.
+# Sample the means of price
+sample_means50 <- rep_sample_n(ames, 50, replace=TRUE, reps=5000) |>
+  group_by(replicate) |>
+  summarize(x_bar = mean(price))
 
+# Plot the results
+ggplot(sample_means50, aes(x=x_bar)) +
+  geom_histogram(binwidth = 1500) +
+  labs(x="Mean Price",
+       y="Count",
+       title="Sampling Distribution of Price")
 ```
 
-<div id="answer">
-Type your answer for **Exercise 6** here and delete this sentence.
+::: {}
+This distribution is approximately normal in shape, and so is unimodal and symmetric. I would estimate that the mean home price of the population is near $180,000.
+:::
 
+------------------------------------------------------------------------
 
-</div>
-
-_________
-
-<div id="exercise">
-**Exercise 7**: Change your sample size from 50 to 150. Then, compute a simulated  sampling distribution using the same method as above, and store these means in an object named `x_bar` in the `sample_means150` tibble. Describe the shape of this simulated sampling distribution, and compare it to the simulated sampling distribution for a sample size of 50.  Based on this simulated sampling distribution, what would you estimate the mean sale price of homes in Ames is?
-</div>
+::: {}
+**Exercise 7**: Change your sample size from 50 to 150. Then, compute a simulated sampling distribution using the same method as above, and store these means in an object named `x_bar` in the `sample_means150` tibble. Describe the shape of this simulated sampling distribution, and compare it to the simulated sampling distribution for a sample size of 50. Based on this simulated sampling distribution, what would you estimate the mean sale price of homes in Ames is?
+:::
 
 ```{r, label = "price-sampling-more"}
-# Type your code for Exercise 7 here, and Knit.
+# Sample the means of price
+sample_means150 <- rep_sample_n(ames, 150, replace=TRUE, reps=5000) |>
+  group_by(replicate) |>
+  summarize(x_bar = mean(price))
 
+# Plot the results
+ggplot(sample_means150, aes(x=x_bar)) +
+  geom_histogram(binwidth = 1500) +
+  labs(x="Mean Price",
+       y="Count",
+       title="Sampling Distribution of Price")
 ```
 
-<div id="answer">
-Type your answer for **Exercise 7** here and delete this sentence.
+::: {}
+This plot is approximately normal in shape and has smaller tails compared to the graph before it. I would estimate that the price is $180,000.
+:::
 
-
-</div>
-
-_________
+------------------------------------------------------------------------
 
 So far, the focus has been on estimating the mean price for homes in Ames. Next, you will try to estimate the mean living area.
 
 Note that while you might be able to answer some of these questions using the app, you are expected to write the required code and produce the necessary plots and summary statistics. You are welcome to use the app for exploration.
 
-_______
+------------------------------------------------------------------------
 
-<div id="exercise">
+::: {}
 **Exercise 8**: Take a sample of size 15 from the population and calculate the mean `area` of the homes in this sample. Using this sample, what is your best point estimate of the population mean area of homes?
-</div>
+:::
 
 ```{r, label = "AREA-sample-small"}
-# Type your code for Exercise 8 here, and Knit.
- 
+ex_8_estimate <- sample_n(ames, 15)$area
+ex_8_estimate
+mean(ex_8_estimate)
 ```
 
-<div id="answer">
-Type your answer for **Exercise 8** here and delete this sentence.
+::: {}
+My best estimate for the population mean area of the homes is `r mean(ex_8_estimate)` square feet.
+:::
 
+------------------------------------------------------------------------
 
-</div>
-
-_______
-
-<div id="exercise">
+::: {}
 **Exercise 9**: Since you have access to the population, simulate the sampling distribution for $\bar{x}_{area}$ by taking 2000 samples from the population of size 15 and computing 2000 sample means. Store these means in a vector named `x_bar` in a tibble named `sample_means15`. Plot the data; then, describe the shape of this simulated sampling distribution. Based on this simulated sampling distribution, what would you estimate the mean home area of the population is? Finally, calculate and report the population mean.
-</div>
+:::
 
 ```{r, label = "area-sampling-small"}
-# Type your code for Exercise 9 here, and Knit.
+# Generate samples
+sample_means15 <- rep_sample_n(ames, 15, replace=TRUE, reps=2000) |>
+  group_by(replicate) |>
+  summarize(x_bar = mean(area))
 
+# Plot the data
+ggplot(sample_means15, aes(x=x_bar)) +
+  geom_histogram(binwidth = 30)
 ```
 
-<div id="answer">
-Type your answer for **Exercise 9** here and delete this sentence.
+::: {}
+The shape of the sampling distribution is approximately normal or like a T-distribution.
+My best estimate for the mean home area of the population is approximately $1500.
+:::
 
+------------------------------------------------------------------------
 
-</div>
-
-__________
-
-<div id="exercise">
+::: {}
 **Exercise 10**: Change your sample size from 15 to 150. Then, compute the simulated sampling distribution using the same method as above, and store these means in a vector called `x_bar` in a tibble named `sample_means150`. Describe the shape of this simulated sampling distribution, and compare it to the simulated sampling distribution for a sample size of 15. Based on this simulated sampling distribution, what would you estimate the mean area of homes in Ames is?
-</div>
+:::
 
 ```{r, label = "area-sampling-big"}
-# Type your code for Exercise 10 here, and Knit.
+# Generate samples
+sample_means150 <- rep_sample_n(ames, 150, replace=TRUE, reps=2000) |>
+  group_by(replicate) |>
+  summarize(x_bar = mean(area))
 
+# Plot the data
+ggplot(sample_means150, aes(x=x_bar)) +
+  geom_histogram(bins=40)
 ```
 
-<div id="answer">
-Type your answer for **Exercise 10** here and delete this sentence.
+::: {}
+This distribution is closer to a T-distribution. It is still largely symmetric and unimodal.
+My estimate using this sample for the mean area of homes in Ames is $1,500.
+:::
 
+------------------------------------------------------------------------
 
-</div>
+6.  Which of the following is false?
 
-_________
+    <ol>
 
-6. Which of the following is false? 
-<ol>
-<li> The variability of the simulated sampling distribution with the smaller sample size (`sample_means15`) is smaller than the variability of the simulated sampling distribution with the larger sample size (`sample_means150`). </li>
-<li> The means for the two sampling distributions are roughly similar. </li> 
-<li> Both sampling distributions are symmetric. </li>
-</ol>
+    <li>The variability of the simulated sampling distribution with the smaller sample size (`sample_means15`) is smaller than the variability of the simulated sampling distribution with the larger sample size (`sample_means150`).</li>
+
+    <li>The means for the two sampling distributions are roughly similar.</li>
+
+    <li>Both sampling distributions are symmetric.</li>
+
+    </ol>
 
 ```{r, label =  "price-sampling-compare"}
-# Type your code for Question 6 here, and Knit.
-
+q10_var <- c(var(sample_means15$x_bar), var(sample_means150$x_bar))
+q10_var
 ```
 
-<div id="answer">
-Type your answer for Question 6 here and delete this sentence.
+::: {}
+A) The variability is larger for sampling distributions with smaller sampling sizes, not smaller.
+:::
 
-
-</div>
-
-____________
+------------------------------------------------------------------------
 
 ```{r, label = "sessioninfo"}
 sessionInfo()
 ```
 
-________
-
+------------------------------------------------------------------------
